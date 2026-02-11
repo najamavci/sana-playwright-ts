@@ -1,17 +1,62 @@
-import { Before, After } from "@cucumber/cucumber";
+import { Before, After, Status } from "@cucumber/cucumber";
 import { chromium } from "@playwright/test";
 import type { PWWorld } from "./world";
+import fs from "node:fs";
+import path from "node:path";
 
-const baseURL = process.env.SANA_BASE_URL ?? "https://sana.example.com";
+const baseURL = process.env.SANA_BASE_URL ?? "https://sana.ai/accept-invite?code=Mic6GmSgKMNWqibp";
+const headless = process.env.HEADLESS === undefined ? true : process.env.HEADLESS !== "false";
 
-Before(async function (this: PWWorld) {
-  this.browser = await chromium.launch({ headless: true });
-  this.context = await this.browser.newContext();
+function toFileSafe(name: string) {
+  return name
+      .replace(/[^\w.-]+/g, "_")
+      .replace(/_+/g, "_")
+      .replace(/^_+|_+$/g, "")
+      .slice(0, 180);
+}
+
+Before(async function (this: PWWorld, scenario) {
+  const artifactsDir = path.resolve("playwright", ".artifacts", "cucumber");
+  fs.mkdirSync(artifactsDir, { recursive: true });
+
+  this.browser = await chromium.launch({ headless });
+  this.context = await this.browser.newContext({
+    // Optional: video is great, but can be heavy. Enable if you want:
+    // recordVideo: { dir: path.join(artifactsDir, "videos") },
+  });
+
+  await this.context.tracing.start({
+    screenshots: true,
+    snapshots: true,
+    sources: true,
+  });
+
   this.page = await this.context.newPage();
+
+  // NOTE: you’ll likely navigate to the Tasks/Workflows page in your workflow steps
   await this.page.goto(`${baseURL}/chat`);
 });
 
-After(async function (this: PWWorld) {
+After(async function (this: PWWorld, scenario) {
+  const artifactsDir = path.resolve("playwright", ".artifacts", "cucumber");
+  const name = toFileSafe(scenario.pickle.name);
+
+  const failed = scenario.result?.status === Status.FAILED;
+
+  if (failed && this.page) {
+    const screenshotPath = path.join(artifactsDir, `${name}.png`);
+    const tracePath = path.join(artifactsDir, `${name}.trace.zip`);
+
+    await this.page.screenshot({ path: screenshotPath, fullPage: true }).catch(() => {});
+    await this.context?.tracing.stop({ path: tracePath }).catch(() => {});
+
+    // Attach screenshot to Cucumber report output
+    const screenshot = fs.readFileSync(screenshotPath);
+    await this.attach(screenshot, "image/png");
+  } else {
+    await this.context?.tracing.stop().catch(() => {});
+  }
+
   await this.page?.close().catch(() => {});
   await this.context?.close().catch(() => {});
   await this.browser?.close().catch(() => {});

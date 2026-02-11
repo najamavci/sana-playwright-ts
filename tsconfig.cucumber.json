@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "noEmit": true,
+    "types": ["node", "@playwright/test"]
+  },
+  "include": [
+    "playwright/e2e/**/*.ts",
+    "playwright/support/**/*.ts",
+    "playwright/fixtures/**/*.ts",
+    "playwright/frameworks/**/*.ts"
+  ]
+}

@@ -1,6 +1,6 @@
 import { test as base } from "@playwright/test";
-import { SanaHomePage } from "../../pages/SanaHomePage"
-import { SanaChatPage } from "../../pages/SanaChatPage";
+import { SanaHomePage } from "../src/pages/SanaHomePage"
+import { SanaChatPage } from "../src/pages/SanaChatPage";
 
 type SanaFixtures = {
   sanaHome: SanaHomePage;

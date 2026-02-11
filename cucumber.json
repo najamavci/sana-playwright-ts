@@ -1,0 +1,21 @@
+{
+  "default": {
+    "requireModule": ["ts-node/register"],
+    "env": {
+      "TS_NODE_PROJECT": "tsconfig.cucumber.json"
+    },
+    "paths": ["playwright/e2e/features/**/*.feature"],
+    "require": [
+      "playwright/e2e/stepdefinitions/**/*.ts",
+      "playwright/support/**/*.ts",
+      "playwright/fixtures/**/*.ts",
+      "playwright/frameworks/**/*.ts"
+    ],
+    "format": [
+      "progress",
+      "@cucumber/pretty-formatter",
+      "json:playwright/.artifacts/cucumber-report.json"
+    ],
+    "publishQuiet": true
+  }
+}

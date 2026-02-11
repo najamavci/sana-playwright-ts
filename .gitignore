@@ -5,3 +5,7 @@ screenshots/
 playwright/downloads
 .vscode
 *.ndjson
+.idea
+.DS_Store
+playwright/.artifacts
+node_modules
