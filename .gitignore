@@ -1,0 +1,7 @@
+dist
+*.html
+.env
+screenshots/
+playwright/downloads
+.vscode
+*.ndjson

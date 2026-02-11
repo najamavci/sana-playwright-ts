@@ -1,0 +1,25 @@
+{
+  "name": "sana-playwright-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:bdd": "cucumber-js",
+    "test:ui": " playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test debug",
+    "report": "playwright show-report"
+  },
+  "keywords": [],
+  "author": "Naja Mukovic Avci",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@cucumber/cucumber": "^12.6.0",
+    "@cucumber/pretty-formatter": "^3.0.0",
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.2.3",
+    "typescript": "^5.9.3"
+  }
+}
