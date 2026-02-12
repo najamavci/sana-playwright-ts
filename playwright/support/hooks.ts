@@ -21,8 +21,7 @@ Before(async function (this: PWWorld, scenario) {
 
   this.browser = await chromium.launch({ headless });
   this.context = await this.browser.newContext({
-    // Optional: video is great, but can be heavy. Enable if you want:
-    // recordVideo: { dir: path.join(artifactsDir, "videos") },
+
   });
 
   await this.context.tracing.start({
@@ -33,7 +32,6 @@ Before(async function (this: PWWorld, scenario) {
 
   this.page = await this.context.newPage();
 
-  // NOTE: you’ll likely navigate to the Tasks/Workflows page in your workflow steps
   await this.page.goto(`${baseURL}/chat`);
 });
 

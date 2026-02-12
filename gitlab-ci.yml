@@ -1,0 +1,26 @@
+stages:
+  - test
+
+e2e:bdd:
+  stage: test
+  image: mcr.microsoft.com/playwright:v1.58.2-jammy
+  variables:
+    CI: "true"
+    NODE_ENV: "test"
+    # Settings → CI/CD → Variables
+    # SANA_BASE_URL:
+    HEADLESS: "true"
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - node_modules/
+  script:
+    - npm ci
+    - npm run test:bdd
+  artifacts:
+    when: always
+    expire_in: 7 days
+    paths:
+      - playwright/.artifacts/

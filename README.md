@@ -54,7 +54,7 @@ By default, the tests run headless. To run headed:
 ## Running Tests
 
 ### Run all BDD tests
-   `bash npm run test:bdd`
+   `npm run test:bdd`
 
 ### Run workflow scenarios only (tagged `@workflow`)
     npm run test:bdd:workflow

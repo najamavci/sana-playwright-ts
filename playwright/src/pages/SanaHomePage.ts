@@ -7,7 +7,6 @@ export class SanaHomePage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    // Replace these with real selectors from SANA:
     this.header = page.getByTestId("sana-header");
     this.startChatButton = page.getByTestId("start-chat");
   }

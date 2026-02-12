@@ -2,6 +2,7 @@
 Feature: Create a new worklow on Sana
   @workflow @create
   Scenario: Create a new workflow
-    Given I am on the Workflows page
-    When I create a new workflow named "e2e-workflow-<unique>"
-    Then I should see the workflow "e2e-workflow-<unique>" in the workflows list
+    Given I am on the Sana Workflows page
+    When I create a new workflow named "sana-workflow-testing-assignment"
+    And I save and confirm the workflow creation
+    Then I should see the workflow "sana-workflow-testing-assignment" in the workflows list
