@@ -4,8 +4,9 @@ import type { PWWorld } from "./world";
 import fs from "node:fs";
 import path from "node:path";
 
-const baseURL = process.env.SANA_BASE_URL ?? "https://sana.ai/accept-invite?code=Mic6GmSgKMNWqibp";
+const baseURL = process.env.SANA_BASE_URL ?? "https://sana.ai/79Us8e17keYm";
 const headless = process.env.HEADLESS === undefined ? true : process.env.HEADLESS !== "false";
+const authStatePath = path.resolve("playwright", ".auth", "state.json");
 
 function toFileSafe(name: string) {
   return name
@@ -20,8 +21,9 @@ Before(async function (this: PWWorld, scenario) {
   fs.mkdirSync(artifactsDir, { recursive: true });
 
   this.browser = await chromium.launch({ headless });
-  this.context = await this.browser.newContext({
 
+  this.context = await this.browser.newContext({
+    storageState: fs.existsSync(authStatePath) ? authStatePath : undefined,
   });
 
   await this.context.tracing.start({
@@ -32,7 +34,8 @@ Before(async function (this: PWWorld, scenario) {
 
   this.page = await this.context.newPage();
 
-  await this.page.goto(`${baseURL}/chat`);
+  // Start directly where you need to be
+  await this.page.goto(`${baseURL}/workflows`);
 });
 
 After(async function (this: PWWorld, scenario) {
@@ -48,7 +51,6 @@ After(async function (this: PWWorld, scenario) {
     await this.page.screenshot({ path: screenshotPath, fullPage: true }).catch(() => {});
     await this.context?.tracing.stop({ path: tracePath }).catch(() => {});
 
-    // Attach screenshot to Cucumber report output
     const screenshot = fs.readFileSync(screenshotPath);
     await this.attach(screenshot, "image/png");
   } else {

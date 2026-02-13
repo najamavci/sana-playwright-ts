@@ -62,6 +62,12 @@ By default, the tests run headless. To run headed:
 ### Run with custom Cucumber CLI args (example)
     npm run test:bdd -- --tags "@first-test"
 
+## Run a single test scenario (example)
+    npm run test:bdd -- --name "Create a new workflow"
+
+## Run a single Scenario Step in headed mode
+    HEADLESS=false npm run test:bdd -- --tags @tag
+
 ---
 
 ## Reports
@@ -116,6 +122,10 @@ High-level layout:
 - `scripts/` — Utility scripts (e.g., HTML report generation)
 - `playwright/.artifacts/` — Generated traces, screenshots, reports
 
+---
+
+## Saving the state of the browser session
+    SANA_BASE_URL="BASE_URL" SANA_EMAIL="<YOUR_EMAIL>" npx ts-node scripts/login.ts
 ---
 
 ## Coding Standards

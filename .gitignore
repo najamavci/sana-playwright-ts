@@ -9,3 +9,4 @@ playwright/downloads
 .DS_Store
 playwright/.artifacts
 node_modules
+playwright/.auth

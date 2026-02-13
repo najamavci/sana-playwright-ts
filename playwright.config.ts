@@ -1,6 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const baseURL = process.env.SANA_BASE_URL ?? "https://sana.ai/accept-invite?code=Mic6GmSgKMNWqibp";
+const baseURL = process.env.SANA_BASE_URL ?? "https://sana.ai/79Us8e17keYm";
 const headless =
     process.env.HEADLESS === undefined ? true : process.env.HEADLESS !== "false";
 

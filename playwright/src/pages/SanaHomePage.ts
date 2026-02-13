@@ -3,16 +3,16 @@ import { BasePage } from "./BasePage";
 
 export class SanaHomePage extends BasePage {
   readonly header: Locator;
-  readonly startChatButton: Locator;
+  readonly startChatTextArea: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.header = page.getByTestId("sana-header");
-    this.startChatButton = page.getByTestId("start-chat");
+    this.header = page.locator('[class*="Naja Mukovic Avci_Test Workspace"]');
+    this.startChatTextArea = page.locator('[placeholder*="What would you like to do?"]');
   }
 
-  async open() {
-    await this.goto("/");
+  async open(url:string) {
+    await this.goto(url);
   }
 
   async assertLoaded() {
@@ -20,6 +20,6 @@ export class SanaHomePage extends BasePage {
   }
 
   async startChat() {
-    await this.startChatButton.click();
+    await this.startChatTextArea.click();
   }
 }
