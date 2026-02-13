@@ -3,7 +3,7 @@ import { BasePage } from "./BasePage";
 
 export class WorkflowsPage extends BasePage {
     readonly workflowsSidebar: Locator;
-    readonly createWorkflow: Locator;
+    readonly createNewWorkflow: Locator;
     readonly workflowPromptBrowser:Locator;
     readonly triggerType:Locator;
     readonly scheduleTriggerManually:Locator;
@@ -13,75 +13,102 @@ export class WorkflowsPage extends BasePage {
     readonly doneButton:Locator;
     readonly triggerSelectedArrow:Locator;
     readonly workflowsHome:Locator;
-    readonly stepInstruction:Locator;
+    readonly stepTask:Locator;
+    readonly stepNameInput: Locator;
+    readonly stepInformation: Locator;
+    readonly plusButton: Locator;
+    readonly workflowName:Locator;
+    readonly secondstepNameInput:Locator;
+    readonly space:Locator;
+    readonly workflowNamePrompt:Locator;
+
 
 
     constructor(page: Page) {
         super(page);
         this.workflowsSidebar = page.locator('a[href$="/workflows"]');
-        this.createWorkflow=page.getByRole("button", {name:"Create workflow"});
+        this.createNewWorkflow=page.getByRole("button", {name:"Create workflow"});
         this.workflowPromptBrowser=page.locator('[class*="relative min-h-full"]');
         this.triggerType=page.getByRole("button", { name: "Change trigger type" });
         this.scheduleTriggerManually=page.getByText("Run manually");
         this.triggerSelectedArrow=page.locator('[class*="flex items-center"]').first();
-        this.addWorkflowStep= page.getByText('Like "Search the web to find more information"', { exact: true });
+        this.addWorkflowStep = page.getByRole("button", { name: "Add step" });
+        this.stepNameInput = page.locator("#portal-root").getByRole("textbox").first();
         this.taskName=page.getByRole("textbox", {name:"What do you want to do?"});
-        this.saveWorkflow=page.getByRole("button", {name:"Save workflow"});
+        this.saveWorkflow=page.locator("#portal-root").getByRole("button", { name: "Save workflow" })
         this.doneButton=page.getByRole("button", {name:"Done"});
         this.workflowsHome=page.getByText("Workflows");
-        this.stepInstruction=page.locator('[class*="relative inline-block max-w-full"]');
+        this.stepTask=page.locator('[value*="New step"]');
+        this.stepInformation=page.locator("#portal-root ul li [class*='grid']").first().locator("div.text-base div div");
+        this.plusButton=page.locator("#portal-root button").first();
+        this.workflowName = page.locator("#portal-root").getByRole("heading", {level: 1, name: "Start work greeting",})
+        this.secondstepNameInput = page.locator("#portal-root").getByRole("textbox").last();
+        this.space=page.locator('[class*="relative group"]').first();
+        this.workflowNamePrompt=page.locator('[placeholder*="Enter workflow name"]').first();
+
+
+
     }
-    async clickWorkflowsHome(){
-         await this.workflowsHome.click();
-    }
+
     async assertLoaded() {
         await expect(this.workflowsSidebar).toBeVisible();
     }
 
-    async clickWorkflows() {
-        await this.workflowsSidebar.click();
-    }
-
-    async createNewWorkflow(){
-     await this.createWorkflow.click();
+    async clickOnCreateWorkflow(){
+        await this.createNewWorkflow.click();
     }
 
     async changeTriggerType(trigger:string){
-     await this.triggerType.click();
+        await this.triggerType.click();
     }
 
     async clickScheduleTriggerManually(trigger:string){
-     await this.scheduleTriggerManually.click();
+        await this.scheduleTriggerManually.click();
     }
 
-    async triggerSelected(){
-        await expect(this.triggerSelectedArrow).toBeVisible();
-    }
-
-    async clickFirstStep(){
+    async clickFirstStep() {
+        await expect(this.addWorkflowStep).toBeVisible();
         await this.addWorkflowStep.click();
     }
-
-    async addFirstStep(text:string){
-    await this.addWorkflowStep.fill(text);
+    async addSecondtStep(text:string) {
+        await expect(this.secondstepNameInput).toBeVisible();
+        await this.stepTask.fill(text);
     }
 
-    async clickStepInstruction(){
-        await this.stepInstruction.click();
+    async addFirstStep(text: string) {
+        await expect(this.stepNameInput).toBeVisible();
+        await this.stepTask.fill(text);
     }
 
-    async addStepInstruction(text:string){
-        await this.stepInstruction.fill(text);
+    async clickStepInformation(){
+        await expect(this.stepInformation).toBeVisible();
+        await this.stepInformation.click();
     }
+    async fillStepInformation(text:string){
+        await expect(this.stepInformation).toBeVisible();
+        await this.stepInformation.fill(text)
+    }
+
     async addWorkflowTaskName(text:string){
-    await this.taskName.fill(text);
+        await this.taskName.fill(text);
     }
-
     async clickSaveWorkflow(){
-    await this.saveWorkflow.click();
+        await expect(this.saveWorkflow).toBeVisible();
+        await expect(this.saveWorkflow).toBeEnabled();
+
+        await this.saveWorkflow.click();
+        await this.page.waitForTimeout(15000);
+
+        // Wait until saving completes (UI is ready to proceed)
+        await expect(this.doneButton).toBeVisible({ timeout: 30_000 });
+        await expect(this.doneButton).toBeEnabled({ timeout: 30_000 });
     }
 
     async clickDone(){
-    await this.doneButton.click();
+        await expect(this.doneButton).toBeVisible();
+        await this.doneButton.click();
+    }
+    async assertWorkflowPage(){
+        await expect(this.page.locator('h1')).toHaveText("Workflows");
     }
 }
